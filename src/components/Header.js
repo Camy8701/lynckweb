@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/Auth0Context';
+import AuthModal from './AuthModal';
 import { ChevronDown, Globe, Menu, X, Search } from 'lucide-react';
 
 const Header = () => {
@@ -12,6 +13,8 @@ const Header = () => {
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState('login');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +29,15 @@ const Header = () => {
     { code: 'fr', flag: '🇫🇷', name: 'Français' },
     { code: 'de', flag: '🇩🇪', name: 'Deutsch' }
   ];
+
+  const openAuthModal = (mode) => {
+    setAuthMode(mode);
+    setShowAuthModal(true);
+  };
+
+  const closeAuthModal = () => {
+    setShowAuthModal(false);
+  };
 
   const handleLogout = async () => {
     try {
@@ -161,18 +173,18 @@ const Header = () => {
               </div>
             ) : (
               <div className="hidden md:flex items-center space-x-3">
-                <Link 
-                  to="/login"
+                <button 
+                  onClick={() => openAuthModal('login')}
                   className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
                 >
                   Login
-                </Link>
-                <Link 
-                  to="/register"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                </button>
+                <button 
+                  onClick={() => openAuthModal('signup')}
+                  className="bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
                 >
                   Sign Up
-                </Link>
+                </button>
               </div>
             )}
 
@@ -185,7 +197,61 @@ const Header = () => {
             </button>
           </div>
         </div>
+        
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-zinc-900/95 backdrop-blur-sm border-t border-white/10">
+            <div className="px-4 py-4 space-y-3">
+              <Link 
+                to="/courses" 
+                className="block text-gray-300 hover:text-blue-400 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Courses
+              </Link>
+              {!isAuthenticated ? (
+                <>
+                  <button 
+                    onClick={() => {
+                      openAuthModal('login');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left text-gray-300 hover:text-blue-400 transition-colors"
+                  >
+                    Login
+                  </button>
+                  <button 
+                    onClick={() => {
+                      openAuthModal('signup');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block w-full bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              ) : (
+                <button 
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="block w-full text-left text-gray-300 hover:text-red-400 transition-colors"
+                >
+                  Logout
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
+      
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={closeAuthModal} 
+        initialMode={authMode}
+      />
     </header>
   );
 };
