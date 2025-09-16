@@ -33,7 +33,7 @@ const Footer = () => {
 
   const ContactForm = () => (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 rounded-2xl border border-white/20 p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-2xl font-bold text-white">Get in Touch</h3>
           <button
@@ -127,7 +127,7 @@ const Footer = () => {
     <>
       <footer className="relative mt-auto">
         {/* Main Footer */}
-        <div className="bg-gradient-to-r from-purple-900/30 via-blue-900/30 to-pink-900/30 backdrop-blur-md border-t border-white/10">
+        <div className="backdrop-blur-md bg-white/10 border-t border-white/20 mx-4 mb-4 rounded-xl hover:bg-white/15 transition-all">
           <div className="container mx-auto px-6 py-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               
@@ -237,7 +237,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="bg-black/50 border-t border-white/10">
+        <div className="backdrop-blur-md bg-white/10 border-t border-white/20 mx-4 mb-4 rounded-xl hover:bg-white/15 transition-all">
           <div className="container mx-auto px-6 py-4">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
               <div className="flex space-x-6 text-sm text-gray-400">

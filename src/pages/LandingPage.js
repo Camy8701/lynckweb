@@ -44,98 +44,45 @@ const LandingPage = () => {
       
       {/* Welcome Hero Section */}
       <section className="h-screen flex items-center justify-center px-4">
-        <div className="text-center space-y-8">
-          <h1 className="text-8xl lg:text-9xl font-bold text-white tracking-tight">
-            Welcome to<br/>
-            <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
-              Lynck Academy
-            </span>
-          </h1>
-          <p className="text-2xl text-gray-300 max-w-3xl mx-auto">
-            Create professional courses with AI-powered tools and reach students worldwide
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-            <Link
-              to="/become-teacher"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 shadow-lg"
-            >
-              <Play className="w-6 h-6" />
-              <span>Start Teaching</span>
-            </Link>
-            <Link
-              to="/courses"
-              className="border-2 border-gray-600 hover:border-purple-500 text-white hover:text-purple-300 px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-3 hover:bg-gray-800/50 backdrop-blur-sm"
-            >
-              <span>Browse Courses</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-      
-      {/* Course Creation Demo Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-                Course Creation Demo
-              </h2>
-              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                Watch how AI transforms your content into professional courses in minutes
-              </p>
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center h-full w-full">
+          {/* Left Column - Text Content */}
+          <div className="space-y-8 lg:pr-8">
+            <h1 className="text-6xl lg:text-8xl font-bold text-white tracking-tight leading-tight">
+              Welcome to<br/>
+              <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                Lynck Academy
+              </span>
+            </h1>
+            <p className="text-xl lg:text-2xl text-gray-300 max-w-2xl leading-relaxed">
+              Create professional courses with AI-powered tools and reach students worldwide
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 mt-12">
+              <Link
+                to="/become-teacher"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 shadow-lg"
+              >
+                <Play className="w-6 h-6" />
+                <span>Start Teaching</span>
+              </Link>
+              <Link
+                to="/courses"
+                className="border-2 border-gray-600 hover:border-purple-500 text-white hover:text-purple-300 px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-3 hover:bg-gray-800/50 backdrop-blur-sm"
+              >
+                <span>Browse Courses</span>
+              </Link>
             </div>
-            
-            {/* Demo Window */}
-            <div className="relative mx-auto" style={{ maxWidth: '800px' }}>
-              <div className="relative bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
-                {/* Window Header */}
-                <div className="flex items-center justify-between px-6 py-4 bg-gray-800/50 border-b border-white/10">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex space-x-2">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    </div>
-                    <span className="text-gray-300 text-sm font-medium">Course Creation Demo</span>
-                  </div>
-                  <div className="text-xs text-gray-400">v1.0</div>
-                </div>
-                
-                {/* Demo Content */}
-                <div className="aspect-video bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-pink-600/20 flex items-center justify-center relative overflow-hidden">
-                  {/* Background Pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-10 left-10 w-32 h-32 border border-white/20 rounded-full"></div>
-                    <div className="absolute top-20 right-20 w-24 h-24 border border-white/20 rounded-full"></div>
-                    <div className="absolute bottom-16 left-1/3 w-40 h-40 border border-white/20 rounded-full"></div>
-                  </div>
-                  
-                  {/* Play Button */}
-                  <div className="relative z-10 group cursor-pointer">
-                    <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
-                      <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
-                    </div>
-                  </div>
-                  
-                  {/* Floating Elements */}
-                  <div className="absolute top-8 left-8 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                    <div className="text-xs text-white font-medium">AI Processing</div>
-                    <div className="text-xs text-gray-300 mt-1">Content → Course</div>
-                  </div>
-                  
-                  <div className="absolute bottom-8 right-8 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                    <div className="text-xs text-white font-medium">Ready in 3min</div>
-                    <div className="text-xs text-gray-300 mt-1">Professional Quality</div>
-                  </div>
-                </div>
-                
-                {/* Window Footer */}
-                <div className="px-6 py-4 bg-gray-800/30 border-t border-white/10">
-                  <div className="flex items-center justify-between text-sm text-gray-400">
-                    <span>✨ AI-Powered Course Generation</span>
-                    <span>🚀 Launch Ready</span>
-                  </div>
-                </div>
+          </div>
+          
+          {/* Right Column - Demo Card */}
+          <div className="hidden lg:block">
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all">
+              <div className="aspect-video bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/20"></div>
+                <Play className="w-16 h-16 text-white relative z-10" />
+              </div>
+              <div className="mt-6 space-y-4">
+                <h3 className="text-xl font-semibold text-white">Course Creation Demo</h3>
+                <p className="text-gray-300">Watch how AI transforms your content into professional courses in minutes</p>
               </div>
             </div>
           </div>
