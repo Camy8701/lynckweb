@@ -143,7 +143,7 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center h-full w-full">
           {/* Left Column - Text Content */}
           <div className="space-y-8 lg:pr-8">
-            <h1 className="text-6xl lg:text-8xl font-bold text-white tracking-tight leading-tight">
+            <h1 className="text-8xl lg:text-9xl xl:text-[12rem] font-bold text-white tracking-tight leading-tight">
               Welcome to<br/>
               <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
                 Lynck Academy

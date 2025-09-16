@@ -127,8 +127,8 @@ const Footer = () => {
     <>
       <footer className="relative mt-auto">
         {/* Main Footer */}
-        <div className="backdrop-blur-md bg-white/10 border-t border-white/20 mx-4 mb-4 rounded-xl hover:bg-white/15 transition-all">
-          <div className="container mx-auto px-6 py-12">
+        <div className="backdrop-blur-md bg-white/10 border-t border-white/20 mx-2 mb-2 rounded-xl hover:bg-white/15 transition-all">
+          <div className="container mx-auto px-4 py-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               
               {/* Company Info */}
@@ -237,8 +237,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="backdrop-blur-md bg-white/10 border-t border-white/20 mx-4 mb-4 rounded-xl hover:bg-white/15 transition-all">
-          <div className="container mx-auto px-6 py-4">
+        <div className="backdrop-blur-md bg-white/10 border-t border-white/20 mx-2 mb-2 rounded-xl hover:bg-white/15 transition-all">
+          <div className="container mx-auto px-4 py-3">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
               <div className="flex space-x-6 text-sm text-gray-400">
                 <a href="#" className="hover:text-purple-400 transition-colors">Privacy Policy</a>
