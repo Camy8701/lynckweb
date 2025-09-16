@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { Star, Play, Brain, Users, Globe } from 'lucide-react';
 
 const LandingPage = () => {
@@ -194,6 +195,9 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

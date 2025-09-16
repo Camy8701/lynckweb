@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { coursesService } from '../services/coursesService';
 import { formatPrice } from '../config/stripe';
 import { Star, Users, Clock, Play } from 'lucide-react';
@@ -178,6 +179,9 @@ const CourseDiscovery = () => {
           )}
         </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
