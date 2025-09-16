@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import HeroCarousel from '../components/HeroCarousel';
 import { Star, Play, Brain, Users, Globe } from 'lucide-react';
 
 const LandingPage = () => {
@@ -44,27 +45,38 @@ const LandingPage = () => {
       
       {/* Welcome Hero Section */}
       <section className="h-screen flex items-center justify-center px-4">
-        <div className="text-center space-y-8">
-          <h1 className="text-8xl lg:text-9xl font-bold text-white tracking-tight">
-            Welcome to<br/>Lynck Academy
-          </h1>
-          <p className="text-2xl text-gray-300 max-w-3xl mx-auto">
-            Create professional courses with AI-powered tools and reach students worldwide
-          </p>
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center h-full w-full">
+          {/* Left Column - Text Content */}
+          <div className="space-y-8 lg:pr-8">
+            <h1 className="text-6xl lg:text-8xl font-bold text-white tracking-tight leading-tight">
+              Welcome to<br/>
+              <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
+                Lynck Academy
+              </span>
+            </h1>
+            <p className="text-xl lg:text-2xl text-gray-300 max-w-2xl leading-relaxed">
+              Create professional courses with AI-powered tools and reach students worldwide
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 mt-12">
+              <Link
+                to="/become-teacher"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 shadow-lg"
+              >
+                <Play className="w-6 h-6" />
+                <span>Start Teaching</span>
+              </Link>
+              <Link
+                to="/courses"
+                className="border-2 border-gray-600 hover:border-purple-500 text-white hover:text-purple-300 px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-3 hover:bg-gray-800/50 backdrop-blur-sm"
+              >
+                <span>Browse Courses</span>
+              </Link>
+            </div>
+          </div>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-            <Link 
-              to="/register"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center justify-center"
-            >
-              Start Teaching
-            </Link>
-            <Link 
-              to="/courses"
-              className="border border-blue-600 text-blue-400 hover:bg-blue-600/10 px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center justify-center"
-            >
-              Browse Courses
-            </Link>
+          {/* Right Column - 3D Carousel */}
+          <div className="hidden lg:block h-full">
+            <HeroCarousel />
           </div>
         </div>
       </section>
