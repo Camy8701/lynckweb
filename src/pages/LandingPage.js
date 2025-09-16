@@ -96,62 +96,127 @@ const LandingPage = () => {
         </div>
       </section>
       
-      {/* Features Section */}
+      {/* Products And Services Section */}
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h2 className="text-4xl lg:text-5xl font-bold leading-tight text-white">
-                  AI-Powered Course Creation
-                </h2>
-                <p className="text-xl text-gray-300 leading-relaxed">
-                  Transform your expertise into professional courses with our intelligent platform
-                </p>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  to="/register"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center justify-center"
-                >
-                  <span>{t('hero.cta.teach')}</span>
-                </Link>
-                <Link 
-                  to="/courses"
-                  className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-lg font-semibold transition-colors inline-flex items-center justify-center"
-                >
-                  <span>{t('hero.cta.browse')}</span>
-                </Link>
-              </div>
-              
-              <div className="flex items-center space-x-8 text-sm text-gray-300">
-                <div className="flex items-center space-x-2">
-                  <div className="flex -space-x-2">
-                    <img className="w-8 h-8 rounded-full border-2 border-white/30" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" alt="User" />
-                    <img className="w-8 h-8 rounded-full border-2 border-white/30" src="https://images.unsplash.com/photo-1494790108755-2616b25b3c55?w=32&h=32&fit=crop&crop=face" alt="User" />
-                    <img className="w-8 h-8 rounded-full border-2 border-white/30" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" alt="User" />
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Products And Services
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Discover our comprehensive suite of tools and services designed to transform your teaching experience
+            </p>
+          </div>
+          
+          {/* Services Carousel */}
+          <div className="relative">
+            <div className="flex overflow-x-auto scrollbar-hide space-x-6 pb-4">
+              {/* Service Card 1 - AI Course Creation */}
+              <div className="flex-shrink-0 w-80">
+                <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all h-full">
+                  <div className="aspect-video bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center relative overflow-hidden mb-6">
+                    <div className="absolute inset-0 bg-black/20"></div>
+                    <Brain className="w-16 h-16 text-white relative z-10" />
                   </div>
-                  <span>10,000+ active learners</span>
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-white">AI Course Creation</h3>
+                    <p className="text-gray-300 text-sm">Transform your expertise into professional courses with our intelligent AI-powered platform in minutes.</p>
+                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <span>4.9/5 rating</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                  <span>4.9/5 rating</span>
+              </div>
+
+              {/* Service Card 2 - Student Management */}
+              <div className="flex-shrink-0 w-80">
+                <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all h-full">
+                  <div className="aspect-video bg-gradient-to-r from-green-600 to-cyan-600 rounded-lg flex items-center justify-center relative overflow-hidden mb-6">
+                    <div className="absolute inset-0 bg-black/20"></div>
+                    <Users className="w-16 h-16 text-white relative z-10" />
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-white">Student Management</h3>
+                    <p className="text-gray-300 text-sm">Comprehensive dashboard to track student progress, engagement, and performance analytics.</p>
+                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                      <Users className="w-4 h-4 text-blue-400" />
+                      <span>10,000+ students</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Card 3 - Global Reach */}
+              <div className="flex-shrink-0 w-80">
+                <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all h-full">
+                  <div className="aspect-video bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center relative overflow-hidden mb-6">
+                    <div className="absolute inset-0 bg-black/20"></div>
+                    <Globe className="w-16 h-16 text-white relative z-10" />
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-white">Global Reach</h3>
+                    <p className="text-gray-300 text-sm">Multi-language support and global infrastructure to reach students worldwide seamlessly.</p>
+                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                      <Globe className="w-4 h-4 text-purple-400" />
+                      <span>50+ countries</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Card 4 - Analytics Dashboard */}
+              <div className="flex-shrink-0 w-80">
+                <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all h-full">
+                  <div className="aspect-video bg-gradient-to-r from-orange-600 to-red-600 rounded-lg flex items-center justify-center relative overflow-hidden mb-6">
+                    <div className="absolute inset-0 bg-black/20"></div>
+                    <div className="w-16 h-16 text-white relative z-10 flex items-center justify-center">
+                      <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-white">Analytics Dashboard</h3>
+                    <p className="text-gray-300 text-sm">Advanced analytics and reporting tools to optimize your course performance and student engagement.</p>
+                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                      <span className="w-4 h-4 text-orange-400">📊</span>
+                      <span>Real-time data</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Card 5 - Certification System */}
+              <div className="flex-shrink-0 w-80">
+                <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all h-full">
+                  <div className="aspect-video bg-gradient-to-r from-indigo-600 to-blue-600 rounded-lg flex items-center justify-center relative overflow-hidden mb-6">
+                    <div className="absolute inset-0 bg-black/20"></div>
+                    <div className="w-16 h-16 text-white relative z-10 flex items-center justify-center">
+                      <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-white">Certification System</h3>
+                    <p className="text-gray-300 text-sm">Professional certificates and badges to validate student achievements and boost course credibility.</p>
+                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                      <span className="w-4 h-4 text-indigo-400">🏆</span>
+                      <span>Verified certificates</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             
-            <div className="relative">
-              <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 animate-float">
-                <div className="aspect-video bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-black/20"></div>
-                  <Play className="w-16 h-16 text-white relative z-10" />
-                </div>
-                <div className="mt-6 space-y-4">
-                  <h3 className="text-xl font-semibold text-white">Course Creation Demo</h3>
-                  <p className="text-gray-300">Watch how AI transforms your content into professional courses in minutes</p>
-                </div>
-              </div>
+            {/* Scroll Indicators */}
+            <div className="flex justify-center mt-8 space-x-2">
+              <div className="w-2 h-2 bg-white/30 rounded-full"></div>
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <div className="w-2 h-2 bg-white/30 rounded-full"></div>
+              <div className="w-2 h-2 bg-white/30 rounded-full"></div>
+              <div className="w-2 h-2 bg-white/30 rounded-full"></div>
             </div>
           </div>
         </div>
