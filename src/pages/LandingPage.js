@@ -76,9 +76,16 @@ const LandingPage = () => {
           {/* Right Column - Demo Card */}
           <div className="hidden lg:block">
             <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all">
-              <div className="aspect-video bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <Play className="w-16 h-16 text-white relative z-10" />
+              <div className="aspect-video rounded-lg overflow-hidden relative">
+                <video
+                  className="w-full h-full object-cover"
+                  controls
+                  preload="metadata"
+                  poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23059669'/%3E%3Cstop offset='100%25' style='stop-color:%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='450' fill='url(%23grad)'/%3E%3Ctext x='400' y='225' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3ECourse Creation Demo%3C/text%3E%3C/svg%3E"
+                >
+                  <source src="/course-demo-video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
               <div className="mt-6 space-y-4">
                 <h3 className="text-xl font-semibold text-white">Course Creation Demo</h3>
