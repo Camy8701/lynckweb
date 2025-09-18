@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Instagram, Facebook, Mail, Phone, MapPin, Send, X } from 'lucide-react';
+import { EditableCard, EditableText } from './EditSystem';
 
 const Footer = () => {
   const [showContactForm, setShowContactForm] = useState(false);
@@ -133,16 +134,54 @@ const Footer = () => {
               
               {/* Company Info */}
               <div className="lg:col-span-1">
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  Let's Learn Together
-                </h3>
-                <p className="text-gray-300 mb-6 leading-relaxed">
-                  Ready to transform your skills with our next-generation learning platform? 
-                  Join thousands of learners building their future with LYNCK Academy.
-                </p>
-                <p className="text-gray-400 text-sm">
-                  © 2024 LYNCK Academy. All rights reserved.
-                </p>
+                <EditableCard
+                  elementId="footer-title-card"
+                  onTextEdit={() => console.log('Footer title edit')}
+                  allowImageEdit={false}
+                  allowMove={true}
+                  className="inline-block mb-4"
+                >
+                  <EditableText
+                    className="text-2xl font-bold text-white"
+                    onTextChange={(value) => console.log('Footer title changed:', value)}
+                    elementId="footer-title"
+                  >
+                    Let's Learn Together
+                  </EditableText>
+                </EditableCard>
+                
+                <EditableCard
+                  elementId="footer-description-card"
+                  onTextEdit={() => console.log('Footer description edit')}
+                  allowImageEdit={false}
+                  allowMove={true}
+                  className="inline-block mb-6"
+                >
+                  <EditableText
+                    className="text-gray-300 leading-relaxed"
+                    onTextChange={(value) => console.log('Footer description changed:', value)}
+                    elementId="footer-description"
+                  >
+                    Ready to transform your skills with our next-generation learning platform? 
+                    Join thousands of learners building their future with LYNCK Academy.
+                  </EditableText>
+                </EditableCard>
+                
+                <EditableCard
+                  elementId="footer-copyright-card"
+                  onTextEdit={() => console.log('Footer copyright edit')}
+                  allowImageEdit={false}
+                  allowMove={true}
+                  className="inline-block"
+                >
+                  <EditableText
+                    className="text-gray-400 text-sm"
+                    onTextChange={(value) => console.log('Footer copyright changed:', value)}
+                    elementId="footer-copyright"
+                  >
+                    © 2024 LYNCK Academy. All rights reserved.
+                  </EditableText>
+                </EditableCard>
               </div>
 
               {/* Contact Info */}

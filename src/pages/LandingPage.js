@@ -1,17 +1,61 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { 
+  EditSystemProvider, 
+  EditableText, 
+  EditableCard, 
+  GlobalUploadModal,
+  GlobalColorPicker,
+  GlobalTextPositioner
+} from '../components/EditSystem';
 import { Star, Play, Brain, Users, Globe } from 'lucide-react';
 
-const LandingPage = () => {
+const LandingPageContent = () => {
   const { t } = useLanguage();
   const carouselRef = useRef(null);
+  const [content, setContent] = useState({
+    title: 'Welcome to',
+    subtitle: 'Lynck Academy',
+    description: 'Create professional courses with AI-powered tools and reach students worldwide',
+    videoUrl: null
+  });
+  
+  // State for card background images and videos
+  const [cardBackgrounds, setCardBackgrounds] = useState({});
+
+  // Function to handle card background uploads
+  const handleCardBackgroundUpload = (elementId, fileData, fileType) => {
+    setCardBackgrounds(prev => ({
+      ...prev,
+      [elementId]: { 
+        data: fileData, 
+        type: fileType,
+        isVideo: fileType.startsWith('video/')
+      }
+    }));
+  };
 
   useEffect(() => {
+    // Handle upload events from EditSystem
+    const handleUpload = (event) => {
+      const { elementId, fileData, fileType } = event.detail;
+      if (elementId === 'hero-video-card') {
+        handleVideoUpload(fileData, fileType);
+      } else {
+        // Handle all other card background uploads
+        handleCardBackgroundUpload(elementId, fileData, fileType);
+      }
+    };
+
+    window.addEventListener('editSystemUpload', handleUpload);
+
     const carousel = carouselRef.current;
-    if (!carousel) return;
+    if (!carousel) return () => {
+      window.removeEventListener('editSystemUpload', handleUpload);
+    };
 
     let animationId;
     let isHovered = false;
@@ -45,11 +89,14 @@ const LandingPage = () => {
     carousel.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
+      window.removeEventListener('editSystemUpload', handleUpload);
       if (animationId) {
         cancelAnimationFrame(animationId);
       }
-      carousel.removeEventListener('mouseenter', handleMouseEnter);
-      carousel.removeEventListener('mouseleave', handleMouseLeave);
+      if (carousel) {
+        carousel.removeEventListener('mouseenter', handleMouseEnter);
+        carousel.removeEventListener('mouseleave', handleMouseLeave);
+      }
     };
   }, []);
 
@@ -104,6 +151,20 @@ const LandingPage = () => {
   // Duplicate services for infinite scroll
   const duplicatedServices = [...services, ...services];
 
+  const handleContentChange = (field, value) => {
+    setContent(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleVideoUpload = (fileData, fileType) => {
+    setContent(prev => ({
+      ...prev,
+      videoUrl: fileData
+    }));
+  };
+
   const featuredCourses = [
     {
       id: 1,
@@ -139,20 +200,69 @@ const LandingPage = () => {
       <Header />
       
       {/* Welcome Hero Section */}
-      <section className="h-screen flex items-center justify-center px-4">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center h-full w-full">
+      <section className="h-screen flex items-center justify-center px-4 relative">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start w-full h-[80vh]">
           {/* Left Column - Text Content */}
-          <div className="space-y-8 lg:pr-8">
-            <h1 className="text-8xl lg:text-9xl xl:text-[12rem] font-bold text-white tracking-tight leading-tight">
-              Welcome to<br/>
-              <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
-                Lynck Academy
-              </span>
-            </h1>
-            <p className="text-xl lg:text-2xl text-gray-300 max-w-2xl leading-relaxed">
-              Create professional courses with AI-powered tools and reach students worldwide
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 mt-12">
+          <div className="lg:pr-8 flex flex-col h-full pt-32">
+            {/* Title */}
+            <div className="mb-6">
+              <EditableCard
+                elementId="hero-title-card"
+                onTextEdit={() => console.log('Hero title edit')}
+                allowImageEdit={false}
+                allowMove={true}
+                className="inline-block"
+              >
+                <EditableText
+                  className="text-7xl lg:text-8xl xl:text-9xl font-bold text-white tracking-tight leading-tight"
+                  onTextChange={(value) => handleContentChange('title', value)}
+                  elementId="hero-title"
+                >
+                  {content.title}
+                </EditableText>
+              </EditableCard>
+              <br/>
+              <EditableCard
+                elementId="hero-subtitle-card"
+                onTextEdit={() => console.log('Hero subtitle edit')}
+                allowImageEdit={false}
+                allowMove={true}
+                className="inline-block"
+              >
+                <EditableText
+                  className="text-7xl lg:text-8xl xl:text-9xl font-bold tracking-tight leading-tight bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent"
+                  onTextChange={(value) => handleContentChange('subtitle', value)}
+                  elementId="hero-subtitle"
+                >
+                  {content.subtitle}
+                </EditableText>
+              </EditableCard>
+            </div>
+            
+            {/* Description */}
+            <div className="mb-8">
+              <EditableCard
+                elementId="hero-description-card"
+                onTextEdit={() => console.log('Hero description edit')}
+                allowImageEdit={false}
+                allowMove={true}
+                className="inline-block max-w-2xl"
+              >
+                <EditableText
+                  className="text-xl lg:text-2xl text-gray-300 max-w-2xl leading-relaxed"
+                  onTextChange={(value) => handleContentChange('description', value)}
+                  elementId="hero-description"
+                >
+                  {content.description}
+                </EditableText>
+              </EditableCard>
+            </div>
+            
+            {/* Spacer to push buttons to correct position */}
+            <div className="flex-1"></div>
+            
+            {/* Buttons - keep exactly where they are */}
+            <div className="flex flex-col sm:flex-row gap-6">
               <Link
                 to="/become-teacher"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 shadow-lg"
@@ -170,24 +280,62 @@ const LandingPage = () => {
           </div>
           
           {/* Right Column - Demo Card */}
-          <div className="hidden lg:block">
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all">
+          <div className="hidden lg:block pt-40 scale-125 ml-20">
+            <EditableCard
+              className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all"
+              elementId="hero-video-card"
+              onImageUpload={handleVideoUpload}
+              allowTextEdit={true}
+              allowImageEdit={true}
+              allowMove={true}
+            >
               <div className="aspect-video rounded-lg overflow-hidden relative">
-                <video
-                  className="w-full h-full object-cover"
-                  controls
-                  preload="metadata"
-                  poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23059669'/%3E%3Cstop offset='100%25' style='stop-color:%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='450' fill='url(%23grad)'/%3E%3Ctext x='400' y='225' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3ECourse Creation Demo%3C/text%3E%3C/svg%3E"
-                >
-                  <source src="/course-demo-video.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+                {content.videoUrl ? (
+                  content.videoUrl.startsWith('data:video/') ? (
+                    <video
+                      className="w-full h-full object-cover"
+                      controls
+                      preload="metadata"
+                      src={content.videoUrl}
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <img
+                      className="w-full h-full object-cover"
+                      src={content.videoUrl}
+                      alt="Course Demo"
+                    />
+                  )
+                ) : (
+                  <video
+                    className="w-full h-full object-cover"
+                    controls
+                    preload="metadata"
+                    poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23059669'/%3E%3Cstop offset='100%25' style='stop-color:%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='450' fill='url(%23grad)'/%3E%3Ctext x='400' y='225' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3ECourse Creation Demo%3C/text%3E%3C/svg%3E"
+                  >
+                    <source src="/course-demo-video.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
               </div>
               <div className="mt-6 space-y-4">
-                <h3 className="text-xl font-semibold text-white">Course Creation Demo</h3>
-                <p className="text-gray-300">Watch how AI transforms your content into professional courses in minutes</p>
+                <EditableText
+                  className="text-xl font-semibold text-white"
+                  onTextChange={(value) => console.log('Video title changed:', value)}
+                  elementId="video-title"
+                >
+                  Course Creation Demo
+                </EditableText>
+                <EditableText
+                  className="text-gray-300"
+                  onTextChange={(value) => console.log('Video description changed:', value)}
+                  elementId="video-description"
+                >
+                  Watch how AI transforms your content into professional courses in minutes
+                </EditableText>
               </div>
-            </div>
+            </EditableCard>
           </div>
         </div>
       </section>
@@ -196,12 +344,20 @@ const LandingPage = () => {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+            <EditableText
+              className="text-4xl lg:text-5xl font-bold text-white mb-4"
+              onTextChange={(value) => console.log('Services section title changed:', value)}
+              elementId="services-section-title"
+            >
               Products And Services
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            </EditableText>
+            <EditableText
+              className="text-xl text-gray-300 max-w-3xl mx-auto"
+              onTextChange={(value) => console.log('Services section description changed:', value)}
+              elementId="services-section-description"
+            >
               Discover our comprehensive suite of tools and services designed to transform your teaching experience
-            </p>
+            </EditableText>
           </div>
           
           {/* Services Carousel */}
@@ -210,11 +366,35 @@ const LandingPage = () => {
               {duplicatedServices.map((service, index) => {
                 const IconComponent = service.icon;
                 const StatIcon = service.statIcon;
+                const elementId = `service-card-${service.id}-${index}`;
+                const backgroundMedia = cardBackgrounds[elementId];
                 
                 return (
                   <div key={`${service.id}-${index}`} className="flex-shrink-0 w-80">
-                    <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all h-full">
-                      <div className={`aspect-video bg-gradient-to-r ${service.gradient} rounded-lg flex items-center justify-center relative overflow-hidden mb-6`}>
+                    <EditableCard
+                      className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 hover:bg-white/15 transition-all h-full"
+                      elementId={elementId}
+                      onImageUpload={(fileData, fileType) => console.log('Service card background upload:', service.title)}
+                      onTextEdit={() => console.log('Service card text edit:', service.title)}
+                      onMove={() => console.log('Service card move:', service.title)}
+                    >
+                      <div className={`aspect-video rounded-lg flex items-center justify-center relative overflow-hidden mb-6 ${!backgroundMedia ? `bg-gradient-to-r ${service.gradient}` : ''}`}>
+                        {backgroundMedia?.isVideo ? (
+                          <video 
+                            src={backgroundMedia.data}
+                            className="absolute inset-0 w-full h-full object-cover"
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                          />
+                        ) : backgroundMedia?.data ? (
+                          <img 
+                            src={backgroundMedia.data}
+                            className="absolute inset-0 w-full h-full object-cover"
+                            alt="Service background"
+                          />
+                        ) : null}
                         <div className="absolute inset-0 bg-black/20"></div>
                         {typeof IconComponent === 'string' ? (
                           <div className="w-16 h-16 text-white relative z-10 flex items-center justify-center">
@@ -233,8 +413,20 @@ const LandingPage = () => {
                         )}
                       </div>
                       <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-white">{service.title}</h3>
-                        <p className="text-gray-300 text-sm">{service.description}</p>
+                        <EditableText
+                          className="text-xl font-semibold text-white"
+                          onTextChange={(value) => console.log('Service title changed:', value)}
+                          elementId={`service-title-${service.id}-${index}`}
+                        >
+                          {service.title}
+                        </EditableText>
+                        <EditableText
+                          className="text-gray-300 text-sm"
+                          onTextChange={(value) => console.log('Service description changed:', value)}
+                          elementId={`service-description-${service.id}-${index}`}
+                        >
+                          {service.description}
+                        </EditableText>
                         <div className="flex items-center space-x-2 text-sm text-gray-400">
                           {typeof StatIcon === 'string' ? (
                             <span className="w-4 h-4">{StatIcon}</span>
@@ -244,7 +436,7 @@ const LandingPage = () => {
                           <span>{service.stat}</span>
                         </div>
                       </div>
-                    </div>
+                    </EditableCard>
                   </div>
                 );
               })}
@@ -265,21 +457,61 @@ const LandingPage = () => {
       {/* Featured Courses Section */}
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-white text-center mb-12">{t('featured.title')}</h2>
+          <EditableText
+            className="text-4xl font-bold text-white text-center mb-12"
+            onTextChange={(value) => console.log('Featured courses title changed:', value)}
+            elementId="featured-courses-title"
+          >
+            {t('featured.title')}
+          </EditableText>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {featuredCourses.map(course => (
-              <div key={course.id} className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl shadow-sm hover:shadow-md transition-all hover:bg-white/15">
-                <div className="aspect-video overflow-hidden rounded-t-xl">
-                  <img 
-                    src={course.image} 
-                    alt={course.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-white">{course.title}</h3>
-                  <p className="text-gray-300 mb-4">by {course.instructor}</p>
+            {featuredCourses.map(course => {
+              const elementId = `course-card-${course.id}`;
+              const backgroundMedia = cardBackgrounds[elementId];
+              
+              return (
+                <EditableCard
+                  key={course.id}
+                  className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl shadow-sm hover:shadow-md transition-all hover:bg-white/15"
+                  elementId={elementId}
+                  onImageUpload={(fileData, fileType) => handleCardBackgroundUpload(elementId, fileData, fileType)}
+                  onTextEdit={() => console.log('Course card text edit:', course.title)}
+                  onMove={() => console.log('Course card move:', course.title)}
+                >
+                  <div className="aspect-video overflow-hidden rounded-t-xl">
+                    {backgroundMedia?.isVideo ? (
+                      <video 
+                        src={backgroundMedia.data}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <img 
+                        src={backgroundMedia?.data || course.image} 
+                        alt={course.title}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    )}
+                  </div>
+                  <div className="p-6">
+                  <EditableText
+                    className="text-xl font-semibold mb-2 text-white"
+                    onTextChange={(value) => console.log('Course title changed:', value)}
+                    elementId={`course-title-${course.id}`}
+                  >
+                    {course.title}
+                  </EditableText>
+                  <EditableText
+                    className="text-gray-300 mb-4"
+                    onTextChange={(value) => console.log('Course instructor changed:', value)}
+                    elementId={`course-instructor-${course.id}`}
+                  >
+                    by {course.instructor}
+                  </EditableText>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-1">
                       <Star className="w-4 h-4 text-yellow-400 fill-current" />
@@ -291,8 +523,9 @@ const LandingPage = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+                </EditableCard>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -301,36 +534,156 @@ const LandingPage = () => {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 text-center space-y-6 hover:bg-white/15 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto">
+            <EditableCard
+              className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 text-center space-y-6 hover:bg-white/15 transition-all"
+              elementId="feature-card-ai"
+              onImageUpload={(fileData, fileType) => console.log('AI feature card background upload')}
+              onTextEdit={() => console.log('AI feature card text edit')}
+              onMove={() => console.log('AI feature card move')}
+              style={{
+                backgroundImage: cardBackgrounds['feature-card-ai'] && !cardBackgrounds['feature-card-ai']?.isVideo ? `url(${cardBackgrounds['feature-card-ai'].data})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                position: 'relative'
+              }}
+            >
+              {cardBackgrounds['feature-card-ai']?.isVideo && (
+                <video 
+                  src={cardBackgrounds['feature-card-ai'].data}
+                  className="absolute inset-0 w-full h-full object-cover rounded-xl"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              )}
+              <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto relative z-10">
                 <Brain className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-semibold text-white">{t('features.ai.title')}</h3>
-              <p className="text-gray-300">{t('features.ai.desc')}</p>
-            </div>
+              <EditableText
+                className="text-2xl font-semibold text-white"
+                onTextChange={(value) => console.log('AI feature title changed:', value)}
+                elementId="feature-ai-title"
+              >
+                {t('features.ai.title')}
+              </EditableText>
+              <EditableText
+                className="text-gray-300"
+                onTextChange={(value) => console.log('AI feature description changed:', value)}
+                elementId="feature-ai-desc"
+              >
+                {t('features.ai.desc')}
+              </EditableText>
+            </EditableCard>
             
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 text-center space-y-6 hover:bg-white/15 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto">
+            <EditableCard
+              className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 text-center space-y-6 hover:bg-white/15 transition-all"
+              elementId="feature-card-tiered"
+              onImageUpload={(fileData, fileType) => console.log('Tiered feature card background upload')}
+              onTextEdit={() => console.log('Tiered feature card text edit')}
+              onMove={() => console.log('Tiered feature card move')}
+              style={{
+                backgroundImage: cardBackgrounds['feature-card-tiered'] && !cardBackgrounds['feature-card-tiered']?.isVideo ? `url(${cardBackgrounds['feature-card-tiered'].data})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                position: 'relative'
+              }}
+            >
+              {cardBackgrounds['feature-card-tiered']?.isVideo && (
+                <video 
+                  src={cardBackgrounds['feature-card-tiered'].data}
+                  className="absolute inset-0 w-full h-full object-cover rounded-xl"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              )}
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto relative z-10">
                 <Users className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-semibold text-white">{t('features.tiered.title')}</h3>
-              <p className="text-gray-300">{t('features.tiered.desc')}</p>
-            </div>
+              <EditableText
+                className="text-2xl font-semibold text-white"
+                onTextChange={(value) => console.log('Tiered feature title changed:', value)}
+                elementId="feature-tiered-title"
+              >
+                {t('features.tiered.title')}
+              </EditableText>
+              <EditableText
+                className="text-gray-300"
+                onTextChange={(value) => console.log('Tiered feature description changed:', value)}
+                elementId="feature-tiered-desc"
+              >
+                {t('features.tiered.desc')}
+              </EditableText>
+            </EditableCard>
             
-            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 text-center space-y-6 hover:bg-white/15 transition-all">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto">
+            <EditableCard
+              className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-8 text-center space-y-6 hover:bg-white/15 transition-all"
+              elementId="feature-card-multilang"
+              onImageUpload={(fileData, fileType) => console.log('Multilang feature card background upload')}
+              onTextEdit={() => console.log('Multilang feature card text edit')}
+              onMove={() => console.log('Multilang feature card move')}
+              style={{
+                backgroundImage: cardBackgrounds['feature-card-multilang'] && !cardBackgrounds['feature-card-multilang']?.isVideo ? `url(${cardBackgrounds['feature-card-multilang'].data})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                position: 'relative'
+              }}
+            >
+              {cardBackgrounds['feature-card-multilang']?.isVideo && (
+                <video 
+                  src={cardBackgrounds['feature-card-multilang'].data}
+                  className="absolute inset-0 w-full h-full object-cover rounded-xl"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+              )}
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto relative z-10">
                 <Globe className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-semibold text-white">{t('features.multilang.title')}</h3>
-              <p className="text-gray-300">{t('features.multilang.desc')}</p>
-            </div>
+              <EditableText
+                className="text-2xl font-semibold text-white"
+                onTextChange={(value) => console.log('Multilang feature title changed:', value)}
+                elementId="feature-multilang-title"
+              >
+                {t('features.multilang.title')}
+              </EditableText>
+              <EditableText
+                className="text-gray-300"
+                onTextChange={(value) => console.log('Multilang feature description changed:', value)}
+                elementId="feature-multilang-desc"
+              >
+                {t('features.multilang.desc')}
+              </EditableText>
+            </EditableCard>
           </div>
         </div>
       </section>
       
       {/* Footer */}
       <Footer />
+      
+      {/* Global Upload Modal */}
+      <GlobalUploadModal />
+      
+      {/* Global Color Picker */}
+      <GlobalColorPicker />
+      
+      {/* Global Text Positioner */}
+      <GlobalTextPositioner />
     </div>
+  );
+};
+
+// Main component with provider
+const LandingPage = () => {
+  return (
+    <EditSystemProvider>
+      <LandingPageContent />
+    </EditSystemProvider>
   );
 };
 

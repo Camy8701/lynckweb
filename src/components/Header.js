@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/Auth0Context';
 import AuthModal from './AuthModal';
+import { EditToggleButton } from './EditSystem';
 import { ChevronDown, Globe, Menu, X, Search } from 'lucide-react';
 
 const Header = () => {
@@ -146,6 +147,7 @@ const Header = () => {
             {/* Auth Buttons */}
             {isAuthenticated && (user || profile) ? (
               <div className="flex items-center space-x-4">
+                <EditToggleButton />
                 <Link
                   to={
                     profile?.role === 'admin' ? '/admin' :
@@ -173,6 +175,7 @@ const Header = () => {
               </div>
             ) : (
               <div className="hidden md:flex items-center space-x-3">
+                <EditToggleButton />
                 <button 
                   onClick={() => openAuthModal('login')}
                   className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
@@ -209,6 +212,9 @@ const Header = () => {
               >
                 Courses
               </Link>
+              <div className="block">
+                <EditToggleButton className="w-full justify-center" />
+              </div>
               {!isAuthenticated ? (
                 <>
                   <button 
