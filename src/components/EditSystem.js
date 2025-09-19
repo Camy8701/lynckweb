@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { Edit3, X, Type, Image as ImageIcon, Move, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Edit3, X, Type, Image as ImageIcon, Move, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Save, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import DOMPurify from 'dompurify';
 
@@ -18,6 +18,9 @@ export const EditSystemProvider = ({ children }) => {
   const [showTextPositioner, setShowTextPositioner] = useState(false);
   const [textPositionerTarget, setTextPositionerTarget] = useState(null);
   const [savedContent, setSavedContent] = useState({});
+  const [pendingChanges, setPendingChanges] = useState(new Set());
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(''); // 'saving', 'saved', 'error'
 
   // Load saved content on mount
   useEffect(() => {
@@ -113,7 +116,22 @@ export const EditSystemProvider = ({ children }) => {
     }
   };
 
-  const saveContent = async (elementId, updates) => {
+  const saveContent = async (elementId, updates, autoSave = false) => {
+    if (!autoSave) {
+      // Mark as pending change for manual save
+      setPendingChanges(prev => new Set([...prev, elementId]));
+      // Store pending updates locally
+      setSavedContent(prev => ({
+        ...prev,
+        [elementId]: {
+          ...prev[elementId],
+          ...updates,
+          _pending: true
+        }
+      }));
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('page_content')
@@ -127,20 +145,63 @@ export const EditSystemProvider = ({ children }) => {
       
       if (error) {
         console.error('Error saving content:', error);
-        return;
+        return false;
       }
       
-      // Update local state
-      setSavedContent(prev => ({
-        ...prev,
-        [elementId]: {
-          ...prev[elementId],
-          ...updates
+      // Update local state and remove pending flag
+      setSavedContent(prev => {
+        const updated = { ...prev };
+        if (updated[elementId]) {
+          delete updated[elementId]._pending;
         }
-      }));
+        return {
+          ...updated,
+          [elementId]: {
+            ...updated[elementId],
+            ...updates
+          }
+        };
+      });
+      
+      // Remove from pending changes
+      setPendingChanges(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(elementId);
+        return newSet;
+      });
+      
+      return true;
     } catch (err) {
       console.error('Failed to save content:', err);
+      return false;
     }
+  };
+
+  const saveAllChanges = async () => {
+    if (pendingChanges.size === 0) return;
+    
+    setIsSaving(true);
+    setSaveStatus('saving');
+    
+    let allSaved = true;
+    const changeArray = Array.from(pendingChanges);
+    
+    for (const elementId of changeArray) {
+      const pendingContent = savedContent[elementId];
+      if (pendingContent && pendingContent._pending) {
+        const { _pending, ...contentToSave } = pendingContent;
+        const success = await saveContent(elementId, contentToSave, true);
+        if (!success) {
+          allSaved = false;
+        }
+      }
+    }
+    
+    setIsSaving(false);
+    setSaveStatus(allSaved ? 'saved' : 'error');
+    
+    // Clear status after 2 seconds
+    setTimeout(() => setSaveStatus(''), 2000);
   };
 
   const value = {
@@ -163,7 +224,12 @@ export const EditSystemProvider = ({ children }) => {
     savedContent,
     setSavedContent,
     saveContent,
-    loadPageContent
+    loadPageContent,
+    pendingChanges,
+    setPendingChanges,
+    saveAllChanges,
+    isSaving,
+    saveStatus
   };
 
   return (
@@ -175,29 +241,91 @@ export const EditSystemProvider = ({ children }) => {
 
 // Edit Toggle Button Component
 export const EditToggleButton = ({ className = "" }) => {
-  const { isEditMode, setIsEditMode } = React.useContext(EditContext);
+  const { 
+    isEditMode, 
+    setIsEditMode, 
+    pendingChanges, 
+    saveAllChanges, 
+    isSaving, 
+    saveStatus 
+  } = React.useContext(EditContext);
+
+  const hasPendingChanges = pendingChanges?.size > 0;
+
+  const handleSave = async (e) => {
+    e.stopPropagation();
+    await saveAllChanges();
+  };
+
+  if (!isEditMode) {
+    return (
+      <button
+        onClick={() => setIsEditMode(true)}
+        className={`px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 transform hover:scale-105 bg-blue-600 hover:bg-blue-700 ${className}`}
+      >
+        <Edit3 className="w-4 h-4 inline mr-2" />
+        Edit
+      </button>
+    );
+  }
 
   return (
-    <button
-      onClick={() => setIsEditMode(!isEditMode)}
-      className={`px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 transform hover:scale-105 ${
-        isEditMode 
-          ? 'bg-red-600 hover:bg-red-700' 
-          : 'bg-blue-600 hover:bg-blue-700'
-      } ${className}`}
-    >
-      {isEditMode ? (
-        <>
-          <X className="w-4 h-4 inline mr-2" />
-          Exit Edit
-        </>
-      ) : (
-        <>
-          <Edit3 className="w-4 h-4 inline mr-2" />
-          Edit
-        </>
+    <div className={`flex items-center space-x-2 ${className}`}>
+      {/* Save Button */}
+      <button
+        onClick={handleSave}
+        disabled={!hasPendingChanges || isSaving}
+        className={`px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 ${
+          !hasPendingChanges || isSaving
+            ? 'bg-gray-500 cursor-not-allowed'
+            : saveStatus === 'saved'
+            ? 'bg-green-600 hover:bg-green-700'
+            : saveStatus === 'error'
+            ? 'bg-red-600 hover:bg-red-700'
+            : 'bg-purple-600 hover:bg-purple-700'
+        }`}
+        title={!hasPendingChanges ? 'No changes to save' : isSaving ? 'Saving...' : 'Save changes'}
+      >
+        {isSaving ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            <span>Saving...</span>
+          </>
+        ) : saveStatus === 'saved' ? (
+          <>
+            <Check className="w-4 h-4" />
+            <span>Saved</span>
+          </>
+        ) : saveStatus === 'error' ? (
+          <>
+            <X className="w-4 h-4" />
+            <span>Error</span>
+          </>
+        ) : (
+          <>
+            <Save className="w-4 h-4" />
+            <span>Save {hasPendingChanges ? `(${pendingChanges.size})` : ''}</span>
+          </>
+        )}
+      </button>
+
+      {/* Exit Edit Button */}
+      <button
+        onClick={() => setIsEditMode(false)}
+        className="px-4 py-2 rounded-lg text-white font-medium transition-all duration-300 transform hover:scale-105 bg-red-600 hover:bg-red-700"
+      >
+        <X className="w-4 h-4 inline mr-2" />
+        Exit
+      </button>
+
+      {/* Pending Changes Indicator */}
+      {hasPendingChanges && (
+        <div className="flex items-center space-x-1 text-yellow-400 text-sm">
+          <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+          <span>{pendingChanges.size} unsaved</span>
+        </div>
       )}
-    </button>
+    </div>
   );
 };
 
@@ -236,6 +364,14 @@ export const EditableText = ({
     const newText = DOMPurify.sanitize(textRef.current.innerHTML); // Get sanitized HTML content to preserve line breaks
     if (onTextChange && newText !== tempText) {
       onTextChange(newText);
+    }
+    
+    // Save content changes (will be marked as pending)
+    const { saveContent } = React.useContext(EditContext) || {};
+    if (saveContent && elementId && newText !== tempText) {
+      saveContent(elementId, {
+        content: newText
+      });
     }
   };
 
@@ -721,7 +857,7 @@ export const EditableCard = ({
     const handleUpload = async (event) => {
       const { elementId: uploadElementId, fileData, fileType } = event.detail;
       if (uploadElementId === elementId) {
-        // Save to Supabase
+        // Save to Supabase (mark as pending)
         if (elementId) {
           await saveContent(elementId, {
             background_media: fileData,
@@ -847,7 +983,7 @@ export const EditableCard = ({
       }
     }
     
-    // Save color changes to Supabase
+    // Save color changes to Supabase (mark as pending)
     if (updatedElement && elementId) {
       await saveContent(elementId, {
         text_styles: {
