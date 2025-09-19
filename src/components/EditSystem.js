@@ -29,12 +29,14 @@ export const EditSystemProvider = ({ children }) => {
 
   const loadPageContent = async () => {
     try {
+      // Try to load from Supabase first
       const { data, error } = await supabase
         .from('page_content')
         .select('*');
       
       if (error) {
-        console.error('Error loading content:', error);
+        console.warn('Supabase unavailable, using localStorage fallback:', error.message);
+        loadFromLocalStorage();
         return;
       }
       
@@ -47,7 +49,31 @@ export const EditSystemProvider = ({ children }) => {
       // Apply saved content to DOM
       applySavedContent(contentMap);
     } catch (err) {
-      console.error('Failed to load content:', err);
+      console.warn('Database connection failed, using localStorage fallback:', err.message);
+      loadFromLocalStorage();
+    }
+  };
+
+  const loadFromLocalStorage = () => {
+    try {
+      const savedData = localStorage.getItem('lynck_page_content');
+      if (savedData) {
+        const contentMap = JSON.parse(savedData);
+        setSavedContent(contentMap);
+        applySavedContent(contentMap);
+        console.log('Loaded content from localStorage');
+      }
+    } catch (err) {
+      console.error('Failed to load from localStorage:', err);
+    }
+  };
+
+  const saveToLocalStorage = (contentMap) => {
+    try {
+      localStorage.setItem('lynck_page_content', JSON.stringify(contentMap));
+      console.log('Content saved to localStorage');
+    } catch (err) {
+      console.error('Failed to save to localStorage:', err);
     }
   };
 
@@ -133,6 +159,7 @@ export const EditSystemProvider = ({ children }) => {
     }
 
     try {
+      // Try to save to Supabase first
       const { data, error } = await supabase
         .from('page_content')
         .upsert({
@@ -144,8 +171,8 @@ export const EditSystemProvider = ({ children }) => {
         });
       
       if (error) {
-        console.error('Error saving content:', error);
-        return false;
+        console.warn('Supabase save failed, using localStorage:', error.message);
+        return saveToLocalStorageFallback(elementId, updates);
       }
       
       // Update local state and remove pending flag
@@ -154,13 +181,17 @@ export const EditSystemProvider = ({ children }) => {
         if (updated[elementId]) {
           delete updated[elementId]._pending;
         }
-        return {
+        const finalData = {
           ...updated,
           [elementId]: {
             ...updated[elementId],
             ...updates
           }
         };
+        
+        // Also save to localStorage as backup
+        saveToLocalStorage(finalData);
+        return finalData;
       });
       
       // Remove from pending changes
@@ -172,7 +203,45 @@ export const EditSystemProvider = ({ children }) => {
       
       return true;
     } catch (err) {
-      console.error('Failed to save content:', err);
+      console.warn('Database save failed, using localStorage fallback:', err.message);
+      return saveToLocalStorageFallback(elementId, updates);
+    }
+  };
+
+  const saveToLocalStorageFallback = (elementId, updates) => {
+    try {
+      // Update local state and remove pending flag
+      setSavedContent(prev => {
+        const updated = { ...prev };
+        if (updated[elementId]) {
+          delete updated[elementId]._pending;
+        }
+        const finalData = {
+          ...updated,
+          [elementId]: {
+            ...updated[elementId],
+            ...updates,
+            element_id: elementId,
+            updated_at: new Date().toISOString()
+          }
+        };
+        
+        // Save to localStorage
+        saveToLocalStorage(finalData);
+        return finalData;
+      });
+      
+      // Remove from pending changes
+      setPendingChanges(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(elementId);
+        return newSet;
+      });
+      
+      console.log('Content saved to localStorage successfully');
+      return true;
+    } catch (err) {
+      console.error('Failed to save to localStorage:', err);
       return false;
     }
   };
