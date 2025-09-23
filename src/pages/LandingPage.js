@@ -198,8 +198,8 @@ const LandingPageContent = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      
-      {/* Welcome Hero Section */}
+
+      {/* Original Welcome Hero Section (moved to top) */}
       <section className="h-screen flex items-center justify-center px-4 relative">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start w-full h-[80vh]">
           {/* Left Column - Text Content */}
@@ -261,20 +261,14 @@ const LandingPageContent = () => {
             {/* Spacer to push buttons to correct position */}
             <div className="flex-1"></div>
             
-            {/* Buttons - keep exactly where they are */}
+            {/* Buttons - updated to Start Learning */}
             <div className="flex flex-col sm:flex-row gap-6">
               <Link
-                to="/become-teacher"
+                to="/courses"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 shadow-lg"
               >
                 <Play className="w-6 h-6" />
-                <span>Start Teaching</span>
-              </Link>
-              <Link
-                to="/courses"
-                className="border-2 border-gray-600 hover:border-purple-500 text-white hover:text-purple-300 px-8 py-4 rounded-xl text-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-3 hover:bg-gray-800/50 backdrop-blur-sm"
-              >
-                <span>Browse Courses</span>
+                <span>Start Learning</span>
               </Link>
             </div>
           </div>
@@ -454,6 +448,149 @@ const LandingPageContent = () => {
         </div>
       </section>
 
+      {/* New Google Ads Hero Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Main Headline */}
+          <EditableCard
+            elementId="new-hero-headline-card"
+            className="mb-8"
+            allowImageEdit={false}
+          >
+            <EditableText
+              className="text-5xl md:text-6xl font-bold text-white mb-6"
+              elementId="new-hero-headline"
+            >
+              Master Google Ads + AI Before Jobs Disappear
+            </EditableText>
+          </EditableCard>
+
+          {/* Subhead */}
+          <EditableCard
+            elementId="new-hero-subhead-card"
+            className="mb-12"
+            allowImageEdit={false}
+          >
+            <EditableText
+              className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto mb-4"
+              elementId="new-hero-subhead"
+            >
+              Learn the recession-proof skills that AI can't replace.
+              Join 1,000+ people building €40-75/hour careers while most jobs get automated.
+            </EditableText>
+          </EditableCard>
+
+          {/* Primary CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            <Link
+              to="/courses"
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+            >
+              🔥 Start Learning Now
+            </Link>
+            <button
+              onClick={() => document.getElementById('lead-magnet-section').scrollIntoView({ behavior: 'smooth' })}
+              className="inline-flex items-center px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold rounded-lg transition-all duration-300"
+            >
+              📖 Get Free Mini-Course
+            </button>
+          </div>
+
+          {/* Social Proof */}
+          <EditableCard
+            elementId="new-hero-social-proof-card"
+            className="mb-16"
+            allowImageEdit={false}
+          >
+            <EditableText
+              className="text-gray-400 text-sm"
+              elementId="new-hero-social-proof"
+            >
+              ⭐⭐⭐⭐⭐ "Finally, ads that actually work" - 200+ reviews
+            </EditableText>
+          </EditableCard>
+        </div>
+      </section>
+
+      {/* Lead Magnet Section */}
+      <section id="lead-magnet-section" className="py-16 px-4 bg-gradient-to-r from-blue-900/20 to-purple-900/20">
+        <div className="max-w-4xl mx-auto">
+          <EditableCard
+            elementId="lead-magnet-card"
+            className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12 text-center"
+          >
+            <EditableText
+              className="text-3xl md:text-4xl font-bold text-white mb-6"
+              elementId="lead-magnet-title"
+            >
+              🎁 FREE: The Google Ads Starter Kit
+            </EditableText>
+
+            <EditableText
+              className="text-xl text-gray-300 mb-8"
+              elementId="lead-magnet-subtitle"
+            >
+              Get the exact templates and checklists I used to go from €0 to €75/hour:
+            </EditableText>
+
+            <div className="grid md:grid-cols-2 gap-4 mb-8 text-left">
+              <div className="space-y-3">
+                <div className="flex items-center text-gray-300">
+                  <span className="text-green-400 mr-3">✅</span>
+                  5-Step Campaign Launch Checklist
+                </div>
+                <div className="flex items-center text-gray-300">
+                  <span className="text-green-400 mr-3">✅</span>
+                  Profit-Boosting Keywords Template
+                </div>
+                <div className="flex items-center text-gray-300">
+                  <span className="text-green-400 mr-3">✅</span>
+                  AI Prompts for Ad Copy That Converts
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center text-gray-300">
+                  <span className="text-green-400 mr-3">✅</span>
+                  ROI Tracking Spreadsheet (Google Sheets)
+                </div>
+                <div className="flex items-center text-gray-300">
+                  <span className="text-green-400 mr-3">✅</span>
+                  Client Pitch Templates
+                </div>
+                <div className="flex items-center text-gray-300">
+                  <span className="text-green-400 mr-3">✅</span>
+                  30 Proven AI Ad Copy Prompts
+                </div>
+              </div>
+            </div>
+
+            <form className="max-w-md mx-auto mb-6">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+                >
+                  Send Me The Free Kit
+                </button>
+              </div>
+            </form>
+
+            <EditableText
+              className="text-sm text-gray-400"
+              elementId="lead-magnet-disclaimer"
+            >
+              💡 Join 2,500+ marketers. No spam, unsubscribe anytime.
+            </EditableText>
+          </EditableCard>
+        </div>
+      </section>
+
       {/* Featured Courses Section */}
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
@@ -526,6 +663,77 @@ const LandingPageContent = () => {
                 </EditableCard>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Your New Skillset Section */}
+      <section className="py-16 px-4 bg-gradient-to-r from-zinc-900/50 to-black/50">
+        <div className="max-w-6xl mx-auto">
+          <EditableCard
+            elementId="skills-title-card"
+            className="text-center mb-16"
+            allowImageEdit={false}
+          >
+            <EditableText
+              className="text-3xl md:text-4xl font-bold text-white mb-4"
+              elementId="skills-title"
+            >
+              🎯 Your New Skillset
+            </EditableText>
+            <EditableText
+              className="text-xl text-gray-400"
+              elementId="skills-subtitle"
+            >
+              Career security in an AI world
+            </EditableText>
+          </EditableCard>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6">
+              <div className="text-2xl mb-3">✅</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Launch profitable Google Ads in 24 hours</h3>
+              <p className="text-gray-300 text-sm">Master the exact setup process we use at Google</p>
+            </div>
+
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6">
+              <div className="text-2xl mb-3">✅</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Use AI to cut campaign setup time by 80%</h3>
+              <p className="text-gray-300 text-sm">Leverage AI tools for keyword research and ad copy</p>
+            </div>
+
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6">
+              <div className="text-2xl mb-3">✅</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Track and optimize for maximum ROI</h3>
+              <p className="text-gray-300 text-sm">Learn professional analytics and optimization techniques</p>
+            </div>
+
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6">
+              <div className="text-2xl mb-3">✅</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Land freelance clients at €40-75/hour</h3>
+              <p className="text-gray-300 text-sm">Build a profitable freelance career with proven strategies</p>
+            </div>
+
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6">
+              <div className="text-2xl mb-3">✅</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Build passive income with digital products</h3>
+              <p className="text-gray-300 text-sm">Create and sell your own digital marketing products</p>
+            </div>
+
+            <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-6">
+              <div className="text-2xl mb-3">✅</div>
+              <h3 className="text-lg font-semibold text-white mb-2">Get the exact Google workflows and templates</h3>
+              <p className="text-gray-300 text-sm">Access our internal processes and tested templates</p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Link
+              to="/courses"
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+            >
+              🔥 Start Mastering These Skills Now
+            </Link>
           </div>
         </div>
       </section>
@@ -662,7 +870,86 @@ const LandingPageContent = () => {
           </div>
         </div>
       </section>
-      
+
+      {/* AI Reality Check Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <EditableCard
+            elementId="urgency-title-card"
+            className="mb-12"
+            allowImageEdit={false}
+          >
+            <EditableText
+              className="text-3xl md:text-4xl font-bold text-white mb-6"
+              elementId="urgency-title"
+            >
+              ⚡ The AI Reality Check
+            </EditableText>
+
+            <EditableText
+              className="text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto"
+              elementId="urgency-content"
+            >
+              By 2027, most traditional jobs will be automated. But businesses will always need one thing: customers.
+              <br/><br/>
+              That's where you come in. Google Ads + AI skills are your insurance policy.
+              <br/><br/>
+              While others panic, you'll profit.
+            </EditableText>
+          </EditableCard>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <EditableCard
+            elementId="final-homepage-cta-card"
+            className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12"
+            allowImageEdit={false}
+          >
+            <EditableText
+              className="text-3xl md:text-4xl font-bold text-white mb-6"
+              elementId="final-homepage-cta-title"
+            >
+              🚀 Secure Your AI-Proof Career
+            </EditableText>
+
+            <EditableText
+              className="text-xl text-gray-300 leading-relaxed mb-8 max-w-2xl mx-auto"
+              elementId="final-homepage-cta-content"
+            >
+              Time is running out. Every day you wait, AI gets smarter and jobs disappear.
+              <br/><br/>
+              Don't be left behind.
+            </EditableText>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+              <Link
+                to="/courses"
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+              >
+                🔥 Join Now - €297 €197 (Limited Time)
+              </Link>
+            </div>
+
+            <EditableText
+              className="text-sm text-gray-400 mb-4"
+              elementId="final-homepage-cta-guarantee"
+            >
+              💰 30-Day Money-Back Guarantee
+            </EditableText>
+
+            <EditableText
+              className="text-sm text-gray-300"
+              elementId="final-homepage-cta-urgency"
+            >
+              Starting Monday: 500 new students, lifetime access, proven curriculum.
+            </EditableText>
+          </EditableCard>
+        </div>
+      </section>
+
       {/* Footer */}
       <Footer />
       

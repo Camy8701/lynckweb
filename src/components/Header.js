@@ -96,6 +96,18 @@ const Header = () => {
                 Courses
               </Link>
               <Link 
+                to="/my-story" 
+                className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
+              >
+                My Story
+              </Link>
+              <Link 
+                to="/about" 
+                className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
+              >
+                About
+              </Link>
+              <Link 
                 to="/teacher" 
                 className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
               >
@@ -211,6 +223,20 @@ const Header = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Courses
+              </Link>
+              <Link 
+                to="/my-story" 
+                className="block text-gray-300 hover:text-blue-400 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                My Story
+              </Link>
+              <Link 
+                to="/about" 
+                className="block text-gray-300 hover:text-blue-400 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                About
               </Link>
               <div className="block">
                 <EditToggleButton className="w-full justify-center" />

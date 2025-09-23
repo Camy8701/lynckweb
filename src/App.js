@@ -16,6 +16,8 @@ import LessonPlayer from './pages/LessonPlayer';
 import AuthCallback from './pages/AuthCallback';
 import BecomeTeacher from './pages/BecomeTeacher';
 import AdminDashboard from './pages/AdminDashboard';
+import MyStoryPage from './pages/MyStoryPage';
+import AboutPage from './pages/AboutPage';
 
 function App() {
   // Check if Auth0 is properly configured
@@ -46,6 +48,8 @@ function App() {
               <Route path="/callback" element={<AuthCallback />} />
               <Route path="/become-teacher" element={<BecomeTeacher />} />
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/my-story" element={<MyStoryPage />} />
+              <Route path="/about" element={<AboutPage />} />
               {/* Fallback route - redirects to home if no match */}
               <Route path="*" element={<LandingPage />} />
             </Routes>
